@@ -60,13 +60,13 @@ void initializeBoardView(CELL1**& board, int& rowNumbers, int& columnNumbers)
 		flagPos--;
 	}
 
-	delete[]temp; 
+	delete[]temp;
 }
 
 //delete a box when a pair up are made and after finished game
 void deleteBoard(CELL1** board, int& rowNumbers, int& columeNumbers)
 {
-	for (int i = 0; i < rowNumbers; i++) 
+	for (int i = 0; i < rowNumbers; i++)
 	{
 		for (int j = 0; j < columeNumbers; j++)
 		{

@@ -1,12 +1,12 @@
 #include<Windows.h>
 using namespace std;
 
-//Used to move your cursor to a specific location in the console
-void goToRowsColumns(int rowPos, int colPos)
+//Used to move your cursor to a specified location in the console
+void goToXY(int rowPos, int colPos)
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-	int xPos = colPos;
-	int yPos = rowPos;
+	int xPos = rowPos;
+	int yPos = colPos;
 
 	COORD cursorPos;
 
@@ -46,4 +46,5 @@ void initWindow(int length, int width)
 	resizeWindow(width, length);
 	setCursorToConsole(0, 0);
 }
+
 

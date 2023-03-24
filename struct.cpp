@@ -20,7 +20,7 @@ struct CELL1
 {
 	int i, j;
 	char letter = ' ';
-	bool isNotEmpty = true; 
+	bool isNotEmpty = true;
 	bool isSelected = false;
 	void drawBox(int);
 	void deleteBox();

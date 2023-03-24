@@ -1,92 +1,107 @@
 #include "Check1.h"
-bool isThisLineEmpty(CELL_1** board, int p1, int p2, int q1, int q2) {
-    if (p1 == q1) {
-        int y, x, count = 0;
-        if (p2 > q2) 
+#include"struct.h"
+
+bool isThisLineEmpty(CELL1** board, int x1, int y1, int x2, int y2)
+{
+    if (x1 == x2)
+    {
+        int x, y, count = 0;
+
+        if (y1 > y2)
         {
-            x = q2;
-            y = p2;
+            x = y2;
+            y = y1;
         }
-        else 
+        else
         {
-            x = p2;
-            y = q2;
+            x = y1;
+            y = y2;
         }
-        for (int i = x; i <= y; i++) 
+
+        for (int i = x; i <= y; i++)
         {
-            if (board[p1][i].isNotEmpty) 
+            if (board[x1][i].isNotEmpty)
             {
                 count++;
                 if (count == 2) return false;
             }
         }
-        if ((count == 1) && ((!board[p1][p2].isNotEmpty && board[q1][q2].isNotEmpty) || (board[p1][p2].isNotEmpty && !board[q1][q2].isNotEmpty))) {//sai
-            return true;
-        }
-        else if (count == 0) 
+        if ((count == 1) && ((!board[x1][y1].isNotEmpty && board[x2][y2].isNotEmpty) || (board[x1][y1].isNotEmpty && !board[x2][y2].isNotEmpty)))
         {
             return true;
         }
+        else if (count == 0)
+        {
+            return true;
+        }
+
         return false;
     }
-    if (p2 == q2) {
+
+    if (y1 == y2)
+    {
         int x, y, count = 0;
-        if (p1 > q1) 
+        if (x1 > x2)
         {
-            x = q1;
-            y = p1;
+            x = x2;
+            y = x1;
         }
-        else 
+        else
         {
-            x = p1;
-            y = q1;
+            x = x1;
+            y = x2;
         }
-        for (int i = x; i <= y; i++) 
+        for (int i = x; i <= y; i++)
         {
-            if (board[i][p2].isNotEmpty) 
+            if (board[i][y1].isNotEmpty)
             {
                 count++;
                 if (count == 2) return false;
             }
         }
-        if ((count == 1) && ((!board[p1][p2].isNotEmpty && board[q1][q2].isNotEmpty) || (board[p1][p2].isNotEmpty && !board[q1][q2].isNotEmpty))) 
-        {//sai
-            return true;
-        }
-        else if (count == 0) 
+        if ((count == 1) && ((!board[x1][y1].isNotEmpty && board[x2][y2].isNotEmpty) || (board[x1][y1].isNotEmpty && !board[x2][y2].isNotEmpty)))
         {
             return true;
         }
+        else if (count == 0)
+        {
+            return true;
+        }
+
         return false;
     }
     return false;
 }
 
-bool is_I_Matching(CELL_1** board, int p1, int p2, int q1, int q2) 
+bool is_I_Matching(CELL1** board, int x1, int y1, int x2, int y2)
 {
-    //If those two blocks are next to each other 
+    //If those two blocks are next to each other horizotally
 
-    if ((p1 == q1 + 1 || p1 == q1 - 1) && (p2 == q2)) 
+    if ((x1 == x2 + 1 || x1 == x2 - 1) && (y1 == y2))
     {
-        if (board[p1][p2].c == board[q1][q2].c)
+        if (board[x1][y1].letter == board[x2][y2].letter)
             return true;
     }
-    if ((p2 == q2 + 1 || p2 == q2 - 1) && (p1 == q1)) 
+
+    //If those two blocks are next to each other vertically
+
+    if ((y1 == y2 + 1 || y1 == y2 - 1) && (x1 == x2))
     {
-        if (board[p1][p2].c == board[q1][q2].c)
+        if (board[x1][y1].letter == board[x2][y2].letter)
             return true;
     }
 
     // If they are in the same row
-    if (p1 == q1) {
+    if (x1 == x2)
+    {
         int y, x, count = 0;
 
-        x = (p2 > q2? q2 : p2);
-        y = (p2 > q2? p2 : q2);
+        x = (y1 > y2 ? y2 : y1);
+        y = (y1 > y2 ? y1 : y2);
 
-        for (int i = x + 1; i < y; i++) 
+        for (int i = x + 1; i < y; i++)
         {
-            if (board[p1][i].isNotEmpty) 
+            if (board[x1][i].isNotEmpty)
             {
                 return false;
             }
@@ -95,15 +110,16 @@ bool is_I_Matching(CELL_1** board, int p1, int p2, int q1, int q2)
     }
 
     // If they are in the same column
-    if (p2 == q2) {
+    if (y1 == y2)
+    {
         int x, y, count = 0;
 
-        x = (p1 > q1? q1 : p1);
-        y = (p1 > q1? p1 : q1);
+        x = (x1 > x2 ? x2 : x1);
+        y = (x1 > x2 ? x1 : x2);
 
-        for (int i = x + 1; i < y; i++) 
+        for (int i = x + 1; i < y; i++)
         {
-            if (board[i][p2].isNotEmpty) 
+            if (board[i][y1].isNotEmpty)
             {
                 return false;
             }
@@ -113,130 +129,132 @@ bool is_I_Matching(CELL_1** board, int p1, int p2, int q1, int q2)
     return false;
 }
 
-bool is_L_Matching(CELL_1** board, int p1, int p2, int q1, int q2) {
+bool is_L_Matching(CELL1** board, int x1, int y1, int x2, int y2) {
+
     //If they are on the same row or column
-    if (p1 == q1 || p2 == q2) {
+
+    if (x1 == x2 || y1 == y2) {
         return false;
     }
 
     //Check if the path from the meeting point of two block to them is empty
     bool c1, c2;
 
-    //Scenario 1: The meeting point at x=p1 and y=q2 is empty
-    if (!board[p1][q2].isNotEmpty) {
-        c1 = isThisLineEmpty(board, p1, p2, p1, q2); // Path_check from block 1 to the meeting point 
-        c2 = isThisLineEmpty(board, q1, q2, p1, q2); // Path_check from block 2 to the meeting point 
+    //Scenario 1: The meeting point at x=x1 and y=y2 is empty
+    if (!board[x1][y2].isNotEmpty) {
+        c1 = isThisLineEmpty(board, x1, y1, x1, y2); // Path_check from block 1 to the meeting point 
+        c2 = isThisLineEmpty(board, x2, y2, x1, y2); // Path_check from block 2 to the meeting point 
         if (c1 && c2) {
             return true;
         }
     }
 
-    //Scenario 2: The meeting point at x=q1 and y=p2 is empty
-    if (!board[q1][p2].isNotEmpty) {
-        c1 = isThisLineEmpty(board, p1, p2, q1, p2);// Path_check from block 1 to the meeting point
-        c2 = isThisLineEmpty(board, q1, q2, q1, p2);// Path_check from block 2 to the meeting point
+    //Scenario 2: The meeting point at x=x2 and y=y1 is empty
+
+    if (!board[x2][y1].isNotEmpty) {
+        c1 = isThisLineEmpty(board, x1, y1, x2, y1);// Path_check from block 1 to the meeting point
+        c2 = isThisLineEmpty(board, x2, y2, x2, y1);// Path_check from block 2 to the meeting point
         if (c1 && c2) {
             return true;
-        }
-    }
-    return false; 
-}
-
-bool Zcheck(CELL_1** board, int p1, int p2, int q1, int q2) {
-    if (p1 == q1 || p2 == q2) {
-        return false;
-    }
-    bool c1, c2, c3;
-    int x, y;
-
-    x = (p2 > q2? q2 : p2);
-    y = (p2 > q2? p2 : q2);
-
-    for (int i = x + 1; i < y; i++) {
-        c3 = isThisLineEmpty(board, p1, i, q1, i);
-        if (c3) {
-            c1 = isThisLineEmpty(board, p1, p2, p1, i);
-            c2 = isThisLineEmpty(board, q1, q2, q1, i);
-            if (c1 && c2)
-                return true;
-        }
-    }
-    if (q1 < p1) {
-        x = q1;
-        y = p1;
-    }
-    else {
-        x = p1;
-        y = q1;
-    }
-    for (int i = x + 1; i < y; i++) {
-        c3 = isThisLineEmpty(board, i, p2, i, q2);
-        if (c3) {
-            c1 = isThisLineEmpty(board, p1, p2, i, p2);
-            c2 = isThisLineEmpty(board, q1, q2, i, q2);
-            if (c1 && c2)
-                return true;
         }
     }
     return false;
 }
 
-bool Ucheck(CELL_1** board, int p1, int p2, int q1, int q2) {
-    if (((p1 == q1) && (p1 == 0 || p1 == BOARDHEIGTH - 1) || ((p2 == q2) && (p2 == 0 || q2 == BOARDWIDTH - 1)))) {
-        return true;
+bool Zcheck(CELL1** board, int x1, int y1, int x2, int y2) {
+
+    //If they are on the same row or column
+
+    if (x1 == x2 || y1 == y2) {
+        return false;
     }
+
     bool c1, c2, c3;
     int x, y;
-    if (q2 < p2) {
-        x = q2;
-        y = p2;
+
+    x = (y1 > y2 ? y2 : y1);
+    y = (y1 > y2 ? y1 : y2);
+
+    for (int i = x + 1; i <= y; i++) {
+
+        if (board[x1][i].isNotEmpty)
+        {
+            is_L_Matching(board, x1, i - 1, x2, y2);
+        }
+    }
+
+    x = (x2 > x1 ? x2 : x1);
+    y = (x2 > x1 ? x1 : x2);
+
+    for (int i = x + 1; i <= y; i++) {
+        if (board[i][y1].isNotEmpty)
+        {
+            is_L_Matching(board, i - 1, y1, x2, y2);
+        }
+    }
+    return false;
+}
+
+bool Ucheck(CELL1** board, int x1, int y1, int x2, int y2, int& BOARDHEIGTH, int& BOARDWIDTH) {
+
+    //The two pair on the same row barrier or column barrier
+
+    if (((x1 == x2) && (x1 == 0 || x1 == BOARDHEIGTH - 1) || ((y1 == y2) && (y1 == 0 || y2 == BOARDWIDTH - 1)))) {
+        return true;
+    }
+
+    bool c1, c2, c3;
+    int x, y;
+    if (y2 < y1) {
+        x = y2;
+        y = y1;
     }
     else {
-        x = p2;
-        y = q2;
+        x = y1;
+        y = y2;
     }
     for (int i = 0; i < BOARDWIDTH; i++) {
         if (i <= x || i >= y) {
-            c3 = isThisLineEmpty(board, p1, i, q1, i);
+            c3 = isThisLineEmpty(board, x1, i, x2, i);
             if (c3) {
-                c1 = isThisLineEmpty(board, p1, p2, p1, i);
-                c2 = isThisLineEmpty(board, q1, q2, q1, i);
+                c1 = isThisLineEmpty(board, x1, y1, x1, i);
+                c2 = isThisLineEmpty(board, x2, y2, x2, i);
                 if (c1 && c2) {
                     return true;
                 }
             }
             else if (i == 0 || i == (BOARDWIDTH - 1)) {
-                c1 = isThisLineEmpty(board, p1, p2, p1, i);
-                c2 = isThisLineEmpty(board, q1, q2, q1, i);
-                if ((c1 && c2) || (c1 && q2 == i) || (p2 == i && c2)) {
+                c1 = isThisLineEmpty(board, x1, y1, x1, i);
+                c2 = isThisLineEmpty(board, x2, y2, x2, i);
+                if ((c1 && c2) || (c1 && y2 == i) || (y1 == i && c2)) {
                     return true;
                 }
             }
         }
     }
 
-    if (q1 < p1) {
-        x = q1;
-        y = p1;
+    if (x2 < x1) {
+        x = x2;
+        y = x1;
     }
     else {
-        x = p1;
-        y = q1;
+        x = x1;
+        y = x2;
     }
     for (int i = 0; i < BOARDHEIGTH; i++) {
         if (i <= x || i >= y) {
-            c3 = isThisLineEmpty(board, i, p2, i, q2);
+            c3 = isThisLineEmpty(board, i, y1, i, y2);
             if (c3) {
-                c1 = isThisLineEmpty(board, p1, p2, i, p2);
-                c2 = isThisLineEmpty(board, q1, q2, i, q2);
+                c1 = isThisLineEmpty(board, x1, y1, i, y1);
+                c2 = isThisLineEmpty(board, x2, y2, i, y2);
                 if (c1 && c2) {
                     return true;
                 }
             }
             else if (i == 0 || i == (BOARDHEIGTH - 1)) {
-                c1 = isThisLineEmpty(board, p1, p2, i, p2);
-                c2 = isThisLineEmpty(board, q1, q2, i, q2);
-                if ((c1 && c2) || (c1 && q1 == i) || (p1 == i && c2)) {
+                c1 = isThisLineEmpty(board, x1, y1, i, y1);
+                c2 = isThisLineEmpty(board, x2, y2, i, y2);
+                if ((c1 && c2) || (c1 && x2 == i) || (x1 == i && c2)) {
                     return true;
                 }
             }
@@ -245,33 +263,31 @@ bool Ucheck(CELL_1** board, int p1, int p2, int q1, int q2) {
     return false;
 }
 
-bool allcheck(CELL_1** board, int p1, int p2, int q1, int q2) {
-    if (nextcheck(board, p1, p2, q1, q2)) {
+bool allcheck(CELL1** board, int x1, int y1, int x2, int y2, int& BOARDHEIGTH, int& BOARDWIDTH)
+{
+    if (is_I_Matching(board, x1, y1, x2, y2)) {
         return true;
     }
-    else if (is_I_Matching(board, p1, p2, q1, q2)) {
+    else if (is_L_Matching(board, x1, y1, x2, y2)) {
         return true;
     }
-    else if (is_L_Matching(board, p1, p2, q1, q2)) {
+    else if (Zcheck(board, x1, y1, x2, y2)) {
         return true;
     }
-    else if (Zcheck(board, p1, p2, q1, q2)) {
-        return true;
-    }
-    else if (Ucheck(board, p1, p2, q1, q2)) {
+    else if (Ucheck(board, x1, y1, x2, y2, BOARDHEIGTH, BOARDWIDTH)) {
         return true;
     }
     return false;
 }
 
-bool checkValidPairs(CELL_1** board) {
-    char check = 'A';
-    while (check >= 'A' && check <= 'Z') {
+bool checkValidPairs(CELL1** board, int& BOARDHEIGTH, int& BOARDWIDTH) {
+    char checkMatch = 'A';
+    while (checkMatch >= 'A' && checkMatch <= 'Z') {
         int cnt = 0;
         int* pos = new int[BOARDHEIGTH * BOARDWIDTH];
         for (int i = 0; i < BOARDHEIGTH; i++) {
             for (int j = 0; j < BOARDWIDTH; j++) {
-                if (board[i][j].c == check && board[i][j].isNotEmpty) {
+                if (board[i][j].letter == checkMatch && board[i][j].isNotEmpty) {
                     pos[cnt++] = i;
                     pos[cnt++] = j;
                 }
@@ -279,14 +295,13 @@ bool checkValidPairs(CELL_1** board) {
         }
         for (int i = 0; i < cnt - 2; i += 2) {
             for (int j = i + 2; j < cnt; j += 2) {
-                if (allcheck(board, pos[i], pos[i + 1], pos[j], pos[j + 1])) {
+                if (allcheck(board, pos[i], pos[i + 1], pos[j], pos[j + 1], BOARDHEIGTH, BOARDWIDTH)) {
                     delete[] pos;
                     return true;
                 }
             }
         }
-        check++;
-        delete[] pos;
+        checkMatch++;
     }
     return false;
 }
