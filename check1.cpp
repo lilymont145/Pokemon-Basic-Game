@@ -75,7 +75,7 @@ bool isThisLineEmpty(CELL1** board, int x1, int y1, int x2, int y2)
 
 bool is_I_Matching(CELL1** board, int x1, int y1, int x2, int y2)
 {
-    //If those two blocks are next to each other horizotally
+    //If those two blocks are next to each other horizontally
 
     if ((x1 == x2 + 1 || x1 == x2 - 1) && (y1 == y2))
     {
