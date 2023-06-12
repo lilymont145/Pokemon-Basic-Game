@@ -1,6 +1,11 @@
-#include "Check1.h"
 #include"struct.h"
-
+#include"Console.h"
+void swapNumbers(int* a, int* b)
+{
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
 bool isThisLineEmpty(CELL1** board, int x1, int y1, int x2, int y2)
 {
     if (x1 == x2)
@@ -75,7 +80,7 @@ bool isThisLineEmpty(CELL1** board, int x1, int y1, int x2, int y2)
 
 bool is_I_Matching(CELL1** board, int x1, int y1, int x2, int y2)
 {
-    //If those two blocks are next to each other horizontally
+    //If those two blocks are next to each other vertically
 
     if ((x1 == x2 + 1 || x1 == x2 - 1) && (y1 == y2))
     {
@@ -83,7 +88,7 @@ bool is_I_Matching(CELL1** board, int x1, int y1, int x2, int y2)
             return true;
     }
 
-    //If those two blocks are next to each other vertically
+    //If those two blocks are next to each other horizontally
 
     if ((y1 == y2 + 1 || y1 == y2 - 1) && (x1 == x2))
     {
@@ -142,8 +147,8 @@ bool is_L_Matching(CELL1** board, int x1, int y1, int x2, int y2) {
 
     //Scenario 1: The meeting point at x=x1 and y=y2 is empty
     if (!board[x1][y2].isNotEmpty) {
-        c1 = isThisLineEmpty(board, x1, y1, x1, y2); // Path_check from block 1 to the meeting point 
-        c2 = isThisLineEmpty(board, x2, y2, x1, y2); // Path_check from block 2 to the meeting point 
+        c1 = isThisLineEmpty(board, x1, y1, x1, y2); // Path_check from block 1 to the meeting point
+        c2 = isThisLineEmpty(board, x2, y2, x1, y2); // Path_check from block 2 to the meeting point
         if (c1 && c2) {
             return true;
         }
@@ -163,35 +168,96 @@ bool is_L_Matching(CELL1** board, int x1, int y1, int x2, int y2) {
 
 bool Zcheck(CELL1** board, int x1, int y1, int x2, int y2) {
 
-    //If they are on the same row or column
+    //If they are on the same row or column. We use the I matching instead
 
     if (x1 == x2 || y1 == y2) {
         return false;
     }
 
-    bool c1, c2, c3;
     int x, y;
 
-    x = (y1 > y2 ? y2 : y1);
-    y = (y1 > y2 ? y1 : y2);
+    if (x1 > x2)
+        swapNumbers(&x1, &x2);
 
-    for (int i = x + 1; i <= y; i++) {
-
-        if (board[x1][i].isNotEmpty)
+    //Check if the horizotal line have any empty cells
+    if (x1 < x2)
+    {
+        if (y1 < y2)
         {
-            is_L_Matching(board, x1, i - 1, x2, y2);
+            x = y1;
+            y = y2;
+
+            for (int i = x + 1; i <= y; i++)
+            {
+                if (!board[x1][i].isNotEmpty) //Check every empty cells that can connect with the second cell in an L shape
+                {
+                    if (is_L_Matching(board, x1, i, x2, y2))
+                        return true;
+                }
+                else if (board[x1][i].isNotEmpty) //If there is one empty cel
+                    break;
+            }
+        }
+        else if (y1 > y2)
+        {
+            x = y2;
+            y = y1;
+
+            for (int i = x + 1; i <= y; i++)
+            {
+                if (!board[x2][i].isNotEmpty)
+                {
+                    if (is_L_Matching(board, x2, i, x1, y1))
+                        return true;
+                }
+                else if (board[x2][i].isNotEmpty)
+                    break;
+            }
+
         }
     }
 
-    x = (x2 > x1 ? x2 : x1);
-    y = (x2 > x1 ? x1 : x2);
+    //Check if the vertical line have any empty cells
+    if (y1 > y2)
+        swapNumbers(&y1, &y2);
 
-    for (int i = x + 1; i <= y; i++) {
-        if (board[i][y1].isNotEmpty)
+    if (y1 < y2)
+    {
+        if (x1 < x2)
         {
-            is_L_Matching(board, i - 1, y1, x2, y2);
+            x = x1;
+            y = x2;
+
+            for (int i = x + 1; i <= y; i++)
+            {
+                if (!board[i][y1].isNotEmpty)
+                {
+                    if (is_L_Matching(board, i, y1, x2, y2))
+                        return true;
+                }
+                else if (board[i][y1].isNotEmpty)
+                    break;
+            }
+        }
+
+        else if (x1 > x2)
+        {
+            x = x1;
+            y = x2;
+
+            for (int i = x - 1; i >= y; i--)
+            {
+                if (!board[i][y1].isNotEmpty)
+                {
+                    if (is_L_Matching(board, i, y1, x2, y2))
+                        return true;
+                }
+                else if (board[i][y1].isNotEmpty)
+                    break;
+            }
         }
     }
+
     return false;
 }
 
@@ -233,6 +299,7 @@ bool Ucheck(CELL1** board, int x1, int y1, int x2, int y2, int& BOARDHEIGTH, int
         }
     }
 
+
     if (x2 < x1) {
         x = x2;
         y = x1;
@@ -243,19 +310,21 @@ bool Ucheck(CELL1** board, int x1, int y1, int x2, int y2, int& BOARDHEIGTH, int
     }
     for (int i = 0; i < BOARDHEIGTH; i++) {
         if (i <= x || i >= y) {
-            c3 = isThisLineEmpty(board, i, y1, i, y2);
-            if (c3) {
-                c1 = isThisLineEmpty(board, x1, y1, i, y1);
-                c2 = isThisLineEmpty(board, x2, y2, i, y2);
-                if (c1 && c2) {
-                    return true;
+            if (i <= x || i >= y) {
+                c3 = isThisLineEmpty(board, i, y1, i, y2);
+                if (c3) {
+                    c1 = isThisLineEmpty(board, x1, y1, i, y1);
+                    c2 = isThisLineEmpty(board, x2, y2, i, y2);
+                    if (c1 && c2) {
+                        return true;
+                    }
                 }
-            }
-            else if (i == 0 || i == (BOARDHEIGTH - 1)) {
-                c1 = isThisLineEmpty(board, x1, y1, i, y1);
-                c2 = isThisLineEmpty(board, x2, y2, i, y2);
-                if ((c1 && c2) || (c1 && x2 == i) || (x1 == i && c2)) {
-                    return true;
+                else if (i == 0 || i == (BOARDHEIGTH - 1)) {
+                    c1 = isThisLineEmpty(board, x1, y1, i, y1);
+                    c2 = isThisLineEmpty(board, x2, y2, i, y2);
+                    if ((c1 && c2) || (c1 && x2 == i) || (x1 == i && c2)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -302,6 +371,40 @@ bool checkValidPairs(CELL1** board, int& BOARDHEIGTH, int& BOARDWIDTH) {
             }
         }
         checkMatch++;
+        delete[]pos;
     }
     return false;
+}
+
+bool moveSuggestion (CELL1**board, int& BOARDHEIGHT, int& BOARDWIDTH, position& a, position& b) //reference by Nguyen Thanh Tuan Kiet and VPN
+{
+    char checkMatch = 'A';
+    while (checkMatch >= 'A' && checkMatch <= 'Z') {
+        int cnt = 0;
+        int* pos = new int[BOARDHEIGHT * BOARDWIDTH];
+        for (int i = 0; i < BOARDHEIGHT; i++) {
+            for (int j = 0; j < BOARDWIDTH; j++) {
+                if (board[i][j].letter == checkMatch && board[i][j].isNotEmpty) {
+                    pos[cnt++] = i;
+                    pos[cnt++] = j;
+                }
+            }
+        }
+        for (int i = 0; i < cnt - 2; i += 2) {
+            for (int j = i + 2; j < cnt; j += 2) {
+                if (allcheck(board, pos[i], pos[i + 1], pos[j], pos[j + 1], BOARDHEIGHT, BOARDWIDTH)) {
+                    a.x = pos[i];
+                    a.y = pos[i + 1];
+                    b.x = pos[j];
+                    b.y = pos[j + 1];
+                    delete[] pos;
+                    return true;
+                }
+            }
+        }
+        checkMatch++;
+        delete[]pos;
+    }
+    return false;
+
 }
