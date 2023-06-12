@@ -1,6 +1,4 @@
-#include"struct.h"
 #include"console.h"
-using namespace std;
 
 char box[5][12] = {
             {" --------- "},
@@ -8,6 +6,14 @@ char box[5][12] = {
             {"|         |"},
             {"|         |"},
             {" --------- "}
+};
+
+char bg[5][12] = {
+    {"  /)---(\\  "},
+    {" (/ . . \\) "},
+    {" -\\(*)/    "},
+    {"\\_       (_"},
+    {"(__/-(___)"},
 };
 
 void CELL1::drawBox(int color)
@@ -41,6 +47,41 @@ void CELL1::drawBox(int color)
     }
 }
 
+void CELL1::drawBG()
+{
+    int x = j + 1, y = i + 1;
+
+    for (int i = 0; i < 5; i++) {
+        goToXY(x * 10, y * 4 + i);
+        cout << bg[i];
+    }
+}
+
+void CELL1::highlightMove(int color)
+{
+    int x = j + 1, y = i + 1;
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color + (letter % 6 + 1)); // white background
+    for (int i = 1; i < 4; i++) {
+        goToXY(x * 10 + 1, y * 4 + i);
+        cout << "         ";
+    }
+
+    goToXY(x * 10 + 5, y * 4 + 2);
+    cout << letter;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+}
+
+
+void CELL1::deleteBox()
+{
+    int x = j + 1, y = i + 1;
+
+    for (int i = 0; i < 5; i++) {
+        goToXY(x * 10, y * 4 + i);
+        cout << "         ";
+    }
+}
 void CELL2::drawBox(int color)
 {
     int x = j + 1, y = i + 1;
@@ -68,15 +109,29 @@ void CELL2::drawBox(int color)
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
     }
 }
-
-void CELL1::deleteBox()
+void CELL2::drawBG()
 {
     int x = j + 1, y = i + 1;
 
     for (int i = 0; i < 5; i++) {
         goToXY(x * 10, y * 4 + i);
+        cout << bg[i];
+    }
+}
+
+void CELL2::highlightMove(int color)
+{
+    int x = j + 1, y = i + 1;
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color + (letter % 6 + 1)); // white background
+    for (int i = 1; i < 4; i++) {
+        goToXY(x * 10 + 1, y * 4 + i);
         cout << "         ";
     }
+
+    goToXY(x * 10 + 5, y * 4 + 2);
+    cout << letter;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }
 
 void CELL2::deleteBox()
@@ -88,3 +143,5 @@ void CELL2::deleteBox()
         cout << "         ";
     }
 }
+
+
