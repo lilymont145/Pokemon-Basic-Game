@@ -1,4 +1,4 @@
-#include<Windows.h>
+#include"struct.h"
 using namespace std;
 
 //Used to move your cursor to a specified location in the console
@@ -44,7 +44,8 @@ void resizeWindow(int x, int y)
 void initWindow(int length, int width)
 {
 	resizeWindow(width, length);
-	setCursorToConsole(0, 0);
+	setCursorToConsole(false, 0);
 }
+
 
 
